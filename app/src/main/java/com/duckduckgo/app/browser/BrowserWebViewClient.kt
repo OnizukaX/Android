@@ -26,6 +26,7 @@ import androidx.annotation.RequiresApi
 import androidx.annotation.UiThread
 import androidx.annotation.WorkerThread
 import androidx.core.net.toUri
+import androidx.webkit.WebViewAssetLoader
 import com.duckduckgo.app.accessibility.AccessibilityManager
 import com.duckduckgo.app.browser.certificates.rootstore.CertificateValidationState
 import com.duckduckgo.app.browser.certificates.rootstore.TrustedCertificateStore
@@ -63,7 +64,8 @@ class BrowserWebViewClient(
     private val dispatcherProvider: DispatcherProvider,
     private val emailInjector: EmailInjector,
     private val accessibilityManager: AccessibilityManager,
-    private val trackingLinkDetector: TrackingLinkDetector
+    private val trackingLinkDetector: TrackingLinkDetector,
+    private val assetLoader: WebViewAssetLoader
 ) : WebViewClient() {
 
     var webViewClientListener: WebViewClientListener? = null
@@ -259,6 +261,12 @@ class BrowserWebViewClient(
         webView: WebView,
         request: WebResourceRequest
     ): WebResourceResponse? {
+        val localResponse = assetLoader.shouldInterceptRequest(request.url)
+        Timber.i("Should intercept request: %s, %s", request.url, localResponse != null)
+        if (localResponse != null) {
+            return localResponse
+        }
+
         return runBlocking {
             try {
                 val documentUrl = withContext(Dispatchers.Main) { webView.url }
