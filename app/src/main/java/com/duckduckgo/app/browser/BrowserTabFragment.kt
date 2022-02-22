@@ -165,6 +165,7 @@ import com.duckduckgo.app.browser.databinding.IncludeOmnibarToolbarBinding
 import com.duckduckgo.app.browser.databinding.IncludeQuickAccessItemsBinding
 import com.duckduckgo.app.browser.databinding.PopupWindowBrowserMenuBinding
 import com.duckduckgo.app.statistics.isFireproofExperimentEnabled
+import com.duckduckgo.app.voice.VoiceSearchAvailabilityUtil
 import com.duckduckgo.app.widget.AddWidgetLauncher
 import com.duckduckgo.appbuildconfig.api.AppBuildConfig
 import com.google.android.material.snackbar.BaseTransientBottomBar
@@ -299,6 +300,9 @@ class BrowserTabFragment :
     private val daxDialogCta
         get() = binding.includeNewBrowserTab.includeDaxDialogCta
 
+    private val voiceSearch
+        get() = omnibar.voiceSearchButton
+
     var messageFromPreviousTab: Message? = null
 
     private val initialUrl get() = requireArguments().getString(URL_EXTRA_ARG)
@@ -419,6 +423,7 @@ class BrowserTabFragment :
         viewModel.registerWebViewListener(webViewClient, webChromeClient)
         configureOmnibarTextInput()
         configureFindInPage()
+        configureVoiceSearch()
         configureAutoComplete()
         configureOmnibarQuickAccessGrid()
         configureHomeTabQuickAccessGrid()
@@ -1288,6 +1293,14 @@ class BrowserTabFragment :
     private fun configurePrivacyGrade() {
         omnibar.privacyGradeButton.setOnClickListener {
             browserActivity?.launchPrivacyDashboard()
+        }
+    }
+
+    private fun configureVoiceSearch() {
+        context?.let {
+            if (VoiceSearchAvailabilityUtil.shouldShowVoiceSearchEntry(it)) {
+                voiceSearch.visibility = VISIBLE
+            } else GONE
         }
     }
 
