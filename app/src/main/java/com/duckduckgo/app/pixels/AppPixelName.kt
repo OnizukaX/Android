@@ -255,5 +255,10 @@ enum class AppPixelName(override val pixelName: String) : Pixel.PixelName {
     BOOKMARK_EXPORT_ERROR("m_be_e"),
 
     ENCRYPTED_IO_EXCEPTION("m_e_io_e"),
-    ENCRYPTED_GENERAL_EXCEPTION("m_e_g_e")
+    ENCRYPTED_GENERAL_EXCEPTION("m_e_g_e"),
+
+    VOICE_SEARCH_PRIVACY_DIALOG_ACCEPTED("m_voice_search_privacy_dialog_accepted"),
+    VOICE_SEARCH_PRIVACY_DIALOG_REJECTED("m_voice_search_privacy_dialog_rejected"),
+    VOICE_SEARCH_STARTED("m_voice_search_started"),
+    VOICE_SEARCH_DONE("m_voice_search_done")
 }
